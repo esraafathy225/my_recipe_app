@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_recipe_app/cubits/recipe_cubit.dart';
 import 'package:my_recipe_app/screens/home_screen.dart';
 import 'package:my_recipe_app/services/recipe_service.dart';
 
@@ -13,9 +15,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  HomeScreen(),
+      home: BlocProvider(
+        create: (context) => RecipeCubit(),
+        child: HomeScreen(),
+      ),
     );
   }
 }

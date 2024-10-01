@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_recipe_app/cubits/recipe_cubit.dart';
+import 'package:my_recipe_app/cubits/recipe_state.dart';
+import 'package:my_recipe_app/models/recipe.dart';
 
 import '../widgets/recipe_widget.dart';
 
@@ -28,11 +32,26 @@ class HomeScreen extends StatelessWidget {
               color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
-      body: ListView.builder(
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return RecipeWidget();
-          }),
+      body: BlocBuilder<RecipeCubit,RecipeState>(builder: (context,state){
+        if(state is RecipeLoading){
+          return Center(child: CircularProgressIndicator(color: Color(0xFFE23E3E),));
+        }
+        else if (state is RecipeError){
+          return Center(child: Text(state.message));
+        }
+        else if (state is RecipeLoaded){
+          return ListView.builder(
+              itemCount: state.recipes.length,
+              itemBuilder: (context, index) {
+                return RecipeWidget(
+                  recipe: state.recipes[index],
+                  onTap: (){},
+                );
+              });
+        }else{
+          return Center(child: Text('No Recipes Found'));
+        }
+      }),
     );
   }
 }
